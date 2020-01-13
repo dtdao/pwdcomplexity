@@ -1,0 +1,52 @@
+import React, { useState } from "react";
+import "./App.css";
+import { Container, Form, Col, ProgressBar } from "react-bootstrap";
+import zxcvbn from "zxcvbn";
+
+function App() {
+  const [pwdScore, updateScore] = useState();
+  const [password, updatePassword] = useState("");
+
+  const level = {
+    0: "danger",
+    1: "danger",
+    2: "warning",
+    3: "warning",
+    4: "success"
+  };
+
+  const handleChange = pwd => {
+    console.log(password)
+    updatePassword(pwd);
+    updateScore(zxcvbn(pwd).score);
+  };
+
+  return (
+    <Container>
+      <Form>
+        <Form.Group>
+          <Form.Label>
+            <h1>Password Complexity</h1>
+          </Form.Label>
+          <Col>
+            <Form.Control
+              type="password"
+              value={password}
+              onChange={ev => handleChange(ev.target.value)}
+              placeholder={"Password"}
+            ></Form.Control>
+          </Col>
+          <Col>
+            <ProgressBar
+              variant={level[pwdScore] || "danger"}
+              now={pwdScore * 25}
+              className="mt-2"
+            />
+          </Col>
+        </Form.Group>
+      </Form>
+    </Container>
+  );
+}
+
+export default App;
